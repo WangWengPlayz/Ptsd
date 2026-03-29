@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#050d1a" />
   <title>Mart John F. Labaco | Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,6 +11,21 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- ============ INTRO SCREEN ============ -->
+  <div class="intro-overlay" id="introOverlay">
+    <canvas id="introCanvas"></canvas>
+    <div class="intro-content">
+      <div class="intro-logo">JM<span>.</span></div>
+      <div class="intro-name">
+        <span class="intro-letter" style="--d:0">J</span><span class="intro-letter" style="--d:1">M</span>
+        <span class="intro-sep"> / </span>
+        <span class="intro-letter" style="--d:2">M</span><span class="intro-letter" style="--d:3">a</span><span class="intro-letter" style="--d:4">r</span><span class="intro-letter" style="--d:5">t</span>
+      </div>
+      <div class="intro-tagline">Code. Play. Repeat.</div>
+      <div class="intro-bar-wrap"><div class="intro-bar" id="introBar"></div></div>
+    </div>
+  </div>
 
   <!-- ============ NAVBAR ============ -->
   <nav class="navbar" id="navbar">
@@ -25,6 +41,7 @@
       <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <div class="nav-overlay" id="navOverlay"></div>
   </nav>
 
   <!-- ============ HERO ============ -->
@@ -33,7 +50,9 @@
     <div class="hero-content">
       <div class="profile-wrapper">
         <div class="profile-ring"></div>
-        <img src="profile.jpg" alt="Mart John F. Labaco" class="profile-photo" />
+        <div class="profile-ring ring2"></div>
+        <img src="profile.jpg" alt="Mart" class="profile-photo no-save" draggable="false" />
+        <div class="profile-glow"></div>
       </div>
       <p class="hero-nickname">aka JM / Mart</p>
       <h1 class="hero-name glitch" data-text="Mart John F. Labaco">Mart John F. Labaco</h1>
@@ -48,6 +67,37 @@
     </div>
   </section>
 
+  <!-- ============ BIRTHDAY COUNTDOWN ============ -->
+  <section class="section birthday-section" id="birthday">
+    <div class="container">
+      <div class="birthday-wrap reveal">
+        <div class="birthday-label">🎂 Birthday Countdown</div>
+        <p class="birthday-sub">Next birthday: <strong>April 5</strong></p>
+        <div class="countdown-grid">
+          <div class="countdown-block glass">
+            <span class="count-num" id="cdDays">00</span>
+            <span class="count-label">Days</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-block glass">
+            <span class="count-num" id="cdHours">00</span>
+            <span class="count-label">Hours</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-block glass">
+            <span class="count-num" id="cdMins">00</span>
+            <span class="count-label">Mins</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-block glass">
+            <span class="count-num" id="cdSecs">00</span>
+            <span class="count-label">Secs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ ABOUT ============ -->
   <section class="section" id="about">
     <div class="container">
@@ -55,7 +105,7 @@
       <div class="about-grid">
         <div class="about-img-wrap reveal">
           <div class="about-img-card glass">
-            <img src="profile.jpg" alt="Mart" class="about-photo" />
+            <img src="profile.jpg" alt="Mart" class="about-photo no-save" draggable="false" />
             <div class="about-badge">
               <span>17</span>
               <small>years old</small>
@@ -90,42 +140,36 @@
     <div class="container">
       <h2 class="section-title reveal">Skills</h2>
       <div class="skills-grid">
-
         <div class="skill-card glass reveal">
           <div class="skill-icon">🌐</div>
           <h3>Web Development</h3>
           <p>HTML, CSS, JavaScript</p>
           <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
         </div>
-
         <div class="skill-card glass reveal">
           <div class="skill-icon">🤖</div>
           <h3>AI Tools</h3>
-          <p>Building & Integrating AI</p>
+          <p>Building &amp; Integrating AI</p>
           <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
         </div>
-
         <div class="skill-card glass reveal">
           <div class="skill-icon">⚙️</div>
           <h3>Bot Development</h3>
-          <p>Automation & Bots</p>
+          <p>Automation &amp; Bots</p>
           <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
         </div>
-
         <div class="skill-card glass reveal">
           <div class="skill-icon">🔧</div>
-          <h3>IT Support & Networking</h3>
-          <p>Tech Support & WiFi Setup</p>
+          <h3>IT Support &amp; Networking</h3>
+          <p>Tech Support &amp; WiFi Setup</p>
           <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
         </div>
-
         <div class="skill-card glass reveal certified">
           <div class="skill-icon">🏅</div>
           <h3>CSS NC2 Certified</h3>
           <p>TESDA Certified</p>
           <div class="certified-badge">Certified</div>
         </div>
-
       </div>
     </div>
   </section>
@@ -133,28 +177,44 @@
   <!-- ============ HOBBIES ============ -->
   <section class="section" id="hobbies">
     <div class="container">
-      <h2 class="section-title reveal">Hobbies & Interests</h2>
+      <h2 class="section-title reveal">Hobbies &amp; Interests</h2>
       <div class="hobbies-grid">
 
-        <div class="hobby-card glass reveal">
-          <div class="hobby-emoji">🎮</div>
+        <!-- GAMING CARD (special) -->
+        <div class="hobby-card gaming-card glass reveal" id="gamingCard">
+          <div class="game-switcher">
+            <div class="game-slide" id="gameMLBB">
+              <img src="mlbb.jpg" class="game-logo no-save" alt="MLBB" draggable="false" />
+              <div class="game-label">Mobile Legends</div>
+              <div class="game-tap-hint">Tap to view profile</div>
+            </div>
+            <div class="game-slide hidden" id="gameMinecraft">
+              <img src="minecraft.jpg" class="game-logo no-save" alt="Minecraft" draggable="false" />
+              <div class="game-label">Minecraft Bedrock</div>
+              <div class="game-tap-hint">Tap to view profile</div>
+            </div>
+          </div>
+          <div class="game-switch-btns">
+            <button class="gsw-btn active" id="btnMLBB" data-game="mlbb">MLBB</button>
+            <button class="gsw-btn" id="btnMC" data-game="minecraft">Minecraft</button>
+          </div>
           <h3>Gaming</h3>
-          <p>Mobile Legends Bang Bang (MLBB) &amp; Minecraft</p>
+          <p>Hardcore MLBB &amp; Minecraft player</p>
         </div>
 
-        <div class="hobby-card glass reveal">
+        <div class="hobby-card glass reveal" id="hobbyCode">
           <div class="hobby-emoji">💻</div>
           <h3>Coding</h3>
           <p>Building websites and bots for fun and learning</p>
         </div>
 
-        <div class="hobby-card glass reveal">
+        <div class="hobby-card glass reveal" id="hobbyAI">
           <div class="hobby-emoji">🤖</div>
           <h3>Exploring AI</h3>
           <p>Testing new AI tools and integrating them into projects</p>
         </div>
 
-        <div class="hobby-card glass reveal">
+        <div class="hobby-card glass reveal" id="hobbySing">
           <div class="hobby-emoji">🎤</div>
           <h3>Singing</h3>
           <p>Love to hit those notes whenever the mood strikes</p>
@@ -193,7 +253,6 @@
       <h2 class="section-title reveal">Get In Touch</h2>
       <p class="contact-sub reveal">Feel free to reach out — I'm always down to chat, collaborate, or just vibe.</p>
       <div class="contact-cards">
-
         <a href="mailto:martjohnlabaco985@gmail.com" class="contact-card glass reveal" target="_blank" rel="noopener">
           <div class="contact-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -206,7 +265,6 @@
             <span class="contact-value">martjohnlabaco985@gmail.com</span>
           </div>
         </a>
-
         <a href="https://www.facebook.com/MartJohnFloresLabaco" class="contact-card glass reveal" target="_blank" rel="noopener">
           <div class="contact-icon fb">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -218,7 +276,6 @@
             <span class="contact-value">MartJohnFloresLabaco</span>
           </div>
         </a>
-
       </div>
     </div>
   </section>
@@ -228,6 +285,68 @@
     <p>Made with <span class="heart">♥</span> by <strong>Mart John F. Labaco</strong></p>
     <p class="footer-tag">Code. Play. Repeat.</p>
   </footer>
+
+  <!-- ============ MLBB MODAL ============ -->
+  <div class="modal-backdrop" id="mlbbModal">
+    <div class="modal-box glass">
+      <button class="modal-close" id="closeMLBB">&times;</button>
+      <div class="modal-header">
+        <img src="mlbb.jpg" class="modal-game-logo no-save" alt="MLBB" draggable="false" />
+        <div>
+          <h2 class="modal-title">Mobile Legends</h2>
+          <p class="modal-sub">Bang Bang</p>
+        </div>
+      </div>
+      <div class="modal-profile">
+        <div class="mp-row">
+          <span class="mp-label">IGN</span>
+          <span class="mp-value">WangWeng Playz</span>
+        </div>
+        <div class="mp-row">
+          <span class="mp-label">Player ID</span>
+          <span class="mp-value">1043760574</span>
+        </div>
+        <div class="mp-row">
+          <span class="mp-label">Matches</span>
+          <span class="mp-value highlight">1,000+ Matches</span>
+        </div>
+      </div>
+      <div class="modal-video-wrap">
+        <div class="vid-badge">1K+ Wanwan Matches 🗡️</div>
+        <video class="modal-video" id="wanwanVid" controls playsinline preload="metadata">
+          <source src="wanwan.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MINECRAFT MODAL ============ -->
+  <div class="modal-backdrop" id="mcModal">
+    <div class="modal-box glass">
+      <button class="modal-close" id="closeMC">&times;</button>
+      <div class="modal-header">
+        <img src="minecraft.jpg" class="modal-game-logo no-save" alt="Minecraft" draggable="false" />
+        <div>
+          <h2 class="modal-title">Minecraft</h2>
+          <p class="modal-sub">Bedrock Edition</p>
+        </div>
+      </div>
+      <div class="modal-profile">
+        <div class="mp-row">
+          <span class="mp-label">Edition</span>
+          <span class="mp-value">Bedrock</span>
+        </div>
+        <div class="mp-row">
+          <span class="mp-label">Playstyle</span>
+          <span class="mp-value">Survival & Creative</span>
+        </div>
+        <div class="mp-row">
+          <span class="mp-label">Vibe</span>
+          <span class="mp-value highlight">Exploring & Building 🏗️</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
