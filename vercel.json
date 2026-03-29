@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/uptime.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/uptime", "dest": "/api/uptime.js" },
+    { "src": "/health", "dest": "/api/uptime.js" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ]
+}
