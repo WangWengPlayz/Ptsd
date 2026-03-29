@@ -710,7 +710,8 @@ function resetTheme() {
 }
 
 /* ---- Switch to a different song ---- */
-function switchSong(idx) {
+/* forcePlay=true when the user picks from the picker (always start playing) */
+function switchSong(idx, forcePlay = false) {
   const wasPlaying = musicPlaying;
   if (musicPlaying) stopMusic();
   currentSongIdx = idx;
@@ -720,7 +721,7 @@ function switchSong(idx) {
   applyTheme(idx);
   updateCredit(idx);
   closePicker();
-  if (wasPlaying) {
+  if (wasPlaying || forcePlay) {
     bgMusic.addEventListener('canplay', function onCanPlay() {
       bgMusic.removeEventListener('canplay', onCanPlay);
       startMusic();
@@ -851,7 +852,7 @@ document.addEventListener('click', (e) => {
 document.querySelectorAll('.music-picker-item').forEach(btn => {
   btn.addEventListener('click', () => {
     const idx = parseInt(btn.dataset.idx, 10);
-    if (idx !== currentSongIdx) switchSong(idx);
+    if (idx !== currentSongIdx) switchSong(idx, true); /* always play on manual pick */
     else closePicker();
   });
 });
