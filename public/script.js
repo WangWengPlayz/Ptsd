@@ -468,3 +468,216 @@ document.getElementById('closeMC').addEventListener('click',   () => closeModal(
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(mlbbModal); closeModal(mcModal); }
 });
+
+/* ============================================================
+   LYRICS DATA (LRC parsed)
+   ============================================================ */
+const LYRICS = [
+  { t: 3.971,   l: "Rotting in bed numb and upset" },
+  { t: 7.590,   l: "The hands on the clock are moving along and" },
+  { t: 11.992,  l: "Feels like I'm dead but I'm here instead" },
+  { t: 16.149,  l: "Please make it stop I'm always wrong and" },
+  { t: 20.191,  l: "Stuck inside my never-ending thoughts" },
+  { t: 27.802,  l: "I'm trying hard 'cause I know what it costs" },
+  { t: 34.258,  l: "'Cause one day we'll run out of" },
+  { t: 37.560,  l: "Time" },
+  { t: 38.743,  l: "Memories we'll leave them behind" },
+  { t: 42.632,  l: "Many things we can't control" },
+  { t: 45.844,  l: "I hope you know it's better to try" },
+  { t: 50.671,  l: "'Cause one day we'll run out of" },
+  { t: 53.728,  l: "All of these are natural no one's really in control" },
+  { t: 57.370,  l: "But we live a little 'cause we know" },
+  { t: 59.565,  l: "When we vanish we don't really go" },
+  { t: 61.200,  l: "So I try to run an extra mile hoping for a sign" },
+  { t: 63.826,  l: "If there isn't one then I'm leaving mine" },
+  { t: 66.015,  l: "And for those behind seek and you will find" },
+  { t: 68.227,  l: "There's no reason not to try" },
+  { t: 70.209,  l: "Watching everything from the backseat it's beautiful" },
+  { t: 73.709,  l: "But at times it gets really ugly you already know what to do" },
+  { t: 77.378,  l: "When we've get nothing to lose what we're not changing we choose" },
+  { t: 81.454,  l: "Fighting for whatever cause if the light's dying" },
+  { t: 84.373,  l: "Don't you ever cease to refuse" },
+  { t: 86.492,  l: "Stuck inside my never-ending thoughts" },
+  { t: 94.293,  l: "I'm trying hard 'cause I know what it costs" },
+  { t: 100.769, l: "'Cause one day we'll run out of" },
+  { t: 104.075, l: "Time" },
+  { t: 105.263, l: "Memories we'll leave them behind" },
+  { t: 109.121, l: "Many things we can't control" },
+  { t: 112.080, l: "I hope you know it's better to try" },
+  { t: 117.135, l: "'Cause one day we'll run out of" },
+  { t: 120.531, l: "Time" },
+  { t: 121.571, l: "Memories we'll leave them behind" },
+  { t: 125.581, l: "Darling when push comes to shove" },
+  { t: 128.484, l: "Your best is enough it won't hurt to try" },
+  { t: 133.731, l: "'Cause one day we'll run out of" },
+  { t: 135.762, l: "Time and time again it rains things I don't understand" },
+  { t: 139.616, l: "Drenched all over still I endure all I can" },
+  { t: 143.847, l: "And I'm well aware there's no reset in this world" },
+  { t: 147.802, l: "So I'll never ever walk away with stones left unturned" },
+  { t: 151.548, l: "'Cause if I'm leaving anyway I'm spending every day" },
+  { t: 156.119, l: "Scattering stars in the night sky hoping it'll lead the way for better days" },
+  { t: 161.101, l: "Savor every moment with me while we're here" },
+  { t: 163.305, l: "'Cause I know one day" },
+  { t: 168.805, l: "Time" },
+  { t: 170.620, l: "Memories we'll leave them behind" },
+  { t: 174.440, l: "Many things we can't control" },
+  { t: 177.608, l: "And I hope you know it's better to try" },
+  { t: 182.572, l: "'Cause one day we'll run out of" },
+  { t: 187.745, l: "Time" },
+  { t: 189.076, l: "Memories we'll leave them behind (oh oh)" },
+  { t: 193.168, l: "Many things we can't control (we can't control)" },
+  { t: 196.173, l: "I hope you know it's better to try (I hope you know oh)" },
+  { t: 200.996, l: "'Cause one day we'll run out of" },
+  { t: 204.418, l: "Time" },
+  { t: 205.615, l: "Memories we'll leave them behind" },
+  { t: 209.278, l: "Darling when push comes to shove" },
+  { t: 212.509, l: "Your best is enough it won't hurt to try" },
+  { t: 217.386, l: "'Cause one day we'll run out of" },
+];
+
+/* ============================================================
+   MUSIC PLAYER + LYRICS ENGINE
+   ============================================================ */
+const bgMusic       = document.getElementById('bgMusic');
+const musicToggle   = document.getElementById('musicToggle');
+const lyricsOverlay = document.getElementById('lyricsOverlay');
+const lyricPrev     = document.getElementById('lyricPrev');
+const lyricCurrent  = document.getElementById('lyricCurrent');
+const lyricNext     = document.getElementById('lyricNext');
+
+let musicPlaying    = false;
+let currentLyricIdx = -1;
+let lyricRaf        = null;
+
+/* ---- Build animated word HTML ---- */
+function buildWordHTML(text) {
+  return text.split(' ').map((word, i) => {
+    const isTime = word.toLowerCase().replace(/[^a-z]/g, '') === 'time';
+    const cls    = isTime ? 'ly-word ly-time' : 'ly-word';
+    return `<span class="${cls}" style="--wi:${i}">${word}</span>`;
+  }).join(' ');
+}
+
+/* ---- Update 3-line display ---- */
+function renderLyrics(idx) {
+  const prev = idx > 0 ? LYRICS[idx - 1].l : '';
+  const cur  = idx >= 0 ? LYRICS[idx].l : '';
+  const next = idx >= 0 && idx < LYRICS.length - 1 ? LYRICS[idx + 1].l : '';
+
+  lyricPrev.textContent = prev;
+  lyricNext.textContent = next;
+
+  // Animate current line in
+  lyricCurrent.classList.remove('swap-in');
+  void lyricCurrent.offsetWidth; // reflow
+  lyricCurrent.innerHTML = cur ? buildWordHTML(cur) : '';
+  lyricCurrent.classList.add('swap-in');
+
+  // Particle burst on line change
+  burstParticles();
+}
+
+/* ---- Lyric sync loop (rAF for smooth sync) ---- */
+function lyricLoop() {
+  if (!musicPlaying) return;
+  const ct = bgMusic.currentTime;
+  let idx   = -1;
+  for (let i = LYRICS.length - 1; i >= 0; i--) {
+    if (ct >= LYRICS[i].t) { idx = i; break; }
+  }
+  if (idx !== currentLyricIdx) {
+    currentLyricIdx = idx;
+    renderLyrics(idx);
+  }
+  lyricRaf = requestAnimationFrame(lyricLoop);
+}
+
+/* ---- Start music ---- */
+function startMusic() {
+  bgMusic.play().then(() => {
+    musicPlaying = true;
+    musicToggle.classList.add('playing');
+    musicToggle.classList.remove('muted');
+    lyricsOverlay.classList.add('visible');
+    currentLyricIdx = -1;
+    lyricRaf = requestAnimationFrame(lyricLoop);
+  }).catch(() => {});
+}
+
+/* ---- Stop music ---- */
+function stopMusic() {
+  bgMusic.pause();
+  musicPlaying = false;
+  musicToggle.classList.remove('playing');
+  musicToggle.classList.add('muted');
+  lyricsOverlay.classList.remove('visible');
+  if (lyricRaf) cancelAnimationFrame(lyricRaf);
+  lyricRaf = null;
+  lyricCurrent.innerHTML = '';
+  lyricPrev.textContent  = '';
+  lyricNext.textContent  = '';
+}
+
+/* ---- Toggle ---- */
+musicToggle.addEventListener('click', () => {
+  if (musicPlaying) stopMusic();
+  else startMusic();
+});
+
+/* Auto-start after intro (5s) with slight delay for smoothness */
+setTimeout(() => { startMusic(); }, 5400);
+
+/* ---- Lyrics particle canvas burst ---- */
+const lyricPC  = document.getElementById('lyricParticles');
+const lyricPCX = lyricPC ? lyricPC.getContext('2d') : null;
+let   lcParts  = [];
+
+function resizeLyricCanvas() {
+  if (!lyricPC) return;
+  lyricPC.width  = lyricPC.offsetWidth  || window.innerWidth;
+  lyricPC.height = lyricPC.offsetHeight || 120;
+}
+resizeLyricCanvas();
+window.addEventListener('resize', resizeLyricCanvas, { passive: true });
+
+function burstParticles() {
+  if (!lyricPCX) return;
+  const cx = (lyricPC.width || window.innerWidth) / 2;
+  const cy = (lyricPC.height || 60) / 2;
+  const colors = ['#4f8ef7','#7c5cbf','#ffd700','#ff6b6b','#00e5ff'];
+  for (let i = 0; i < 22; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 3 + 1;
+    lcParts.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 1,
+      r: Math.random() * 3 + 1,
+      life: 1,
+      col: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+  if (lcParts.length > 0 && !lcAnimRunning) animLyricParticles();
+}
+
+let lcAnimRunning = false;
+function animLyricParticles() {
+  if (!lyricPCX) return;
+  lcAnimRunning = true;
+  lyricPCX.clearRect(0, 0, lyricPC.width, lyricPC.height);
+  lcParts = lcParts.filter(p => p.life > 0.01);
+  lcParts.forEach(p => {
+    p.x   += p.vx;
+    p.y   += p.vy;
+    p.vy  += 0.08;
+    p.life -= 0.035;
+    lyricPCX.beginPath();
+    lyricPCX.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    lyricPCX.fillStyle = p.col;
+    lyricPCX.globalAlpha = p.life;
+    lyricPCX.fill();
+    lyricPCX.globalAlpha = 1;
+  });
+  if (lcParts.length > 0) requestAnimationFrame(animLyricParticles);
+  else { lcAnimRunning = false; lyricPCX.clearRect(0, 0, lyricPC.width, lyricPC.height); }
+}
