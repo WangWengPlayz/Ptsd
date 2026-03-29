@@ -355,8 +355,27 @@
     <source src="music.mp3" type="audio/mpeg" />
   </audio>
 
+  <!-- ============ MUSIC PICKER POPUP ============ -->
+  <div class="music-picker" id="musicPicker">
+    <div class="music-picker-title">Select Music</div>
+    <button class="music-picker-item active" id="pickerSong0" data-idx="0">
+      <img src="sb19.jpg" class="picker-logo no-save" alt="SB19" draggable="false" />
+      <div class="picker-info">
+        <span class="picker-song">Time</span>
+        <span class="picker-artist">SB19</span>
+      </div>
+    </button>
+    <button class="music-picker-item" id="pickerSong1" data-idx="1">
+      <img src="benben.jpg" class="picker-logo no-save" alt="Ben&Ben" draggable="false" />
+      <div class="picker-info">
+        <span class="picker-song">Saranggola</span>
+        <span class="picker-artist">Ben&Ben</span>
+      </div>
+    </button>
+  </div>
+
   <!-- ============ MUSIC TOGGLE ============ -->
-  <button class="music-toggle" id="musicToggle" title="Toggle Music">
+  <button class="music-toggle" id="musicToggle" title="Hold to select music">
     <span class="music-wave" id="mw1"></span>
     <span class="music-wave" id="mw2"></span>
     <span class="music-wave" id="mw3"></span>
@@ -373,16 +392,16 @@
     </div>
   </div>
 
-  <!-- ============ SB19 CREDIT + COPYRIGHT ============ -->
+  <!-- ============ MUSIC CREDIT BAR (dynamic) ============ -->
   <div class="music-credit-bar">
-    <div class="copyright-notice">
+    <div class="copyright-notice" id="creditCopyright">
       ⚠️ Copyright Disclaimer: "Time" by SB19 is used for personal non-commercial portfolio purposes only. All rights belong to SB19 and their respective labels. No copyright infringement intended.
     </div>
-    <a href="https://open.spotify.com/artist/3g7vYcdDXnqnDKYFwqXBJP?si=H4xoQgUcR9qu8Wb5jBfZXg" target="_blank" rel="noopener" class="sb19-credit-link">
-      <img src="sb19.jpg" class="sb19-logo no-save" alt="SB19" draggable="false" />
+    <a href="https://open.spotify.com/artist/3g7vYcdDXnqnDKYFwqXBJP?si=H4xoQgUcR9qu8Wb5jBfZXg" target="_blank" rel="noopener" class="sb19-credit-link" id="creditLink">
+      <img src="sb19.jpg" class="sb19-logo no-save" alt="SB19" draggable="false" id="creditLogo" />
       <div class="sb19-credit-text">
-        <span class="sb19-song">🎵 Time</span>
-        <span class="sb19-artist">SB19 — Listen on Spotify</span>
+        <span class="sb19-song" id="creditSong">🎵 Time</span>
+        <span class="sb19-artist" id="creditArtist">SB19 — Listen on Spotify</span>
       </div>
     </a>
   </div>

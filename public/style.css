@@ -934,8 +934,54 @@ body.bday-mode { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.3); }
 .modal-video { width: 100%; border-radius: 14px; display: block; pointer-events: none; background: #000; }
 
 /* ============================================================
-   MUSIC TOGGLE BUTTON
+   MUSIC PICKER POPUP + TOGGLE BUTTON
    ============================================================ */
+.music-picker {
+  position: fixed; bottom: 86px; right: 24px; z-index: 2100;
+  background: rgba(8, 16, 36, 0.96);
+  border: 1px solid rgba(79,142,247,0.25);
+  border-radius: 16px;
+  padding: 14px 12px 10px;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(79,142,247,0.08);
+  min-width: 220px;
+  opacity: 0; transform: translateY(10px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+.music-picker.open {
+  opacity: 1; transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.music-picker-title {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 10px; padding: 0 6px;
+}
+.music-picker-item {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; padding: 9px 10px; border-radius: 10px;
+  background: transparent; border: 1px solid transparent;
+  cursor: pointer; transition: background var(--tr), border-color var(--tr);
+  text-align: left; margin-bottom: 4px;
+}
+.music-picker-item:last-child { margin-bottom: 0; }
+.music-picker-item:hover {
+  background: rgba(79,142,247,0.09);
+  border-color: rgba(79,142,247,0.18);
+}
+.music-picker-item.active {
+  background: rgba(79,142,247,0.13);
+  border-color: rgba(79,142,247,0.3);
+}
+.picker-logo {
+  width: 38px; height: 38px; border-radius: 8px;
+  object-fit: cover; flex-shrink: 0;
+}
+.picker-info { display: flex; flex-direction: column; }
+.picker-song { font-size: 0.88rem; font-weight: 700; color: var(--white); line-height: 1.2; }
+.picker-artist { font-size: 0.7rem; color: var(--accent); margin-top: 2px; }
+
 .music-toggle {
   position: fixed; bottom: 24px; right: 24px; z-index: 2000;
   width: 52px; height: 52px; border-radius: 50%;

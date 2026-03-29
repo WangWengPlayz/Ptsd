@@ -470,84 +470,196 @@ document.addEventListener('keydown', e => {
 });
 
 /* ============================================================
-   LYRICS DATA (LRC parsed)
+   SONGS REGISTRY — add more entries to expand the playlist
    ============================================================ */
-const LYRICS = [
-  { t: 3.971,   l: "Rotting in bed numb and upset" },
-  { t: 7.590,   l: "The hands on the clock are moving along and" },
-  { t: 11.992,  l: "Feels like I'm dead but I'm here instead" },
-  { t: 16.149,  l: "Please make it stop I'm always wrong and" },
-  { t: 20.191,  l: "Stuck inside my never-ending thoughts" },
-  { t: 27.802,  l: "I'm trying hard 'cause I know what it costs" },
-  { t: 34.258,  l: "'Cause one day we'll run out of" },
-  { t: 37.560,  l: "Time" },
-  { t: 38.743,  l: "Memories we'll leave them behind" },
-  { t: 42.632,  l: "Many things we can't control" },
-  { t: 45.844,  l: "I hope you know it's better to try" },
-  { t: 50.671,  l: "'Cause one day we'll run out of" },
-  { t: 53.728,  l: "All of these are natural no one's really in control" },
-  { t: 57.370,  l: "But we live a little 'cause we know" },
-  { t: 59.565,  l: "When we vanish we don't really go" },
-  { t: 61.200,  l: "So I try to run an extra mile hoping for a sign" },
-  { t: 63.826,  l: "If there isn't one then I'm leaving mine" },
-  { t: 66.015,  l: "And for those behind seek and you will find" },
-  { t: 68.227,  l: "There's no reason not to try" },
-  { t: 70.209,  l: "Watching everything from the backseat it's beautiful" },
-  { t: 73.709,  l: "But at times it gets really ugly you already know what to do" },
-  { t: 77.378,  l: "When we've get nothing to lose what we're not changing we choose" },
-  { t: 81.454,  l: "Fighting for whatever cause if the light's dying" },
-  { t: 84.373,  l: "Don't you ever cease to refuse" },
-  { t: 86.492,  l: "Stuck inside my never-ending thoughts" },
-  { t: 94.293,  l: "I'm trying hard 'cause I know what it costs" },
-  { t: 100.769, l: "'Cause one day we'll run out of" },
-  { t: 104.075, l: "Time" },
-  { t: 105.263, l: "Memories we'll leave them behind" },
-  { t: 109.121, l: "Many things we can't control" },
-  { t: 112.080, l: "I hope you know it's better to try" },
-  { t: 117.135, l: "'Cause one day we'll run out of" },
-  { t: 120.531, l: "Time" },
-  { t: 121.571, l: "Memories we'll leave them behind" },
-  { t: 125.581, l: "Darling when push comes to shove" },
-  { t: 128.484, l: "Your best is enough it won't hurt to try" },
-  { t: 133.731, l: "'Cause one day we'll run out of" },
-  { t: 135.762, l: "Time and time again it rains things I don't understand" },
-  { t: 139.616, l: "Drenched all over still I endure all I can" },
-  { t: 143.847, l: "And I'm well aware there's no reset in this world" },
-  { t: 147.802, l: "So I'll never ever walk away with stones left unturned" },
-  { t: 151.548, l: "'Cause if I'm leaving anyway I'm spending every day" },
-  { t: 156.119, l: "Scattering stars in the night sky hoping it'll lead the way for better days" },
-  { t: 161.101, l: "Savor every moment with me while we're here" },
-  { t: 163.305, l: "'Cause I know one day" },
-  { t: 168.805, l: "Time" },
-  { t: 170.620, l: "Memories we'll leave them behind" },
-  { t: 174.440, l: "Many things we can't control" },
-  { t: 177.608, l: "And I hope you know it's better to try" },
-  { t: 182.572, l: "'Cause one day we'll run out of" },
-  { t: 187.745, l: "Time" },
-  { t: 189.076, l: "Memories we'll leave them behind (oh oh)" },
-  { t: 193.168, l: "Many things we can't control (we can't control)" },
-  { t: 196.173, l: "I hope you know it's better to try (I hope you know oh)" },
-  { t: 200.996, l: "'Cause one day we'll run out of" },
-  { t: 204.418, l: "Time" },
-  { t: 205.615, l: "Memories we'll leave them behind" },
-  { t: 209.278, l: "Darling when push comes to shove" },
-  { t: 212.509, l: "Your best is enough it won't hurt to try" },
-  { t: 217.386, l: "'Cause one day we'll run out of" },
+const SONGS = [
+  {
+    src:       'music.mp3',
+    title:     'Time',
+    artist:    'SB19',
+    logo:      'sb19.jpg',
+    spotify:   'https://open.spotify.com/artist/3g7vYcdDXnqnDKYFwqXBJP?si=H4xoQgUcR9qu8Wb5jBfZXg',
+    copyright: '⚠️ Copyright Disclaimer: "Time" by SB19 is used for personal non-commercial portfolio purposes only. All rights belong to SB19 and their respective labels. No copyright infringement intended.',
+    lyrics: [
+      { t: 3.971,   l: "Rotting in bed numb and upset" },
+      { t: 7.590,   l: "The hands on the clock are moving along and" },
+      { t: 11.992,  l: "Feels like I'm dead but I'm here instead" },
+      { t: 16.149,  l: "Please make it stop I'm always wrong and" },
+      { t: 20.191,  l: "Stuck inside my never-ending thoughts" },
+      { t: 27.802,  l: "I'm trying hard 'cause I know what it costs" },
+      { t: 34.258,  l: "'Cause one day we'll run out of" },
+      { t: 37.560,  l: "Time" },
+      { t: 38.743,  l: "Memories we'll leave them behind" },
+      { t: 42.632,  l: "Many things we can't control" },
+      { t: 45.844,  l: "I hope you know it's better to try" },
+      { t: 50.671,  l: "'Cause one day we'll run out of" },
+      { t: 53.728,  l: "All of these are natural no one's really in control" },
+      { t: 57.370,  l: "But we live a little 'cause we know" },
+      { t: 59.565,  l: "When we vanish we don't really go" },
+      { t: 61.200,  l: "So I try to run an extra mile hoping for a sign" },
+      { t: 63.826,  l: "If there isn't one then I'm leaving mine" },
+      { t: 66.015,  l: "And for those behind seek and you will find" },
+      { t: 68.227,  l: "There's no reason not to try" },
+      { t: 70.209,  l: "Watching everything from the backseat it's beautiful" },
+      { t: 73.709,  l: "But at times it gets really ugly you already know what to do" },
+      { t: 77.378,  l: "When we've get nothing to lose what we're not changing we choose" },
+      { t: 81.454,  l: "Fighting for whatever cause if the light's dying" },
+      { t: 84.373,  l: "Don't you ever cease to refuse" },
+      { t: 86.492,  l: "Stuck inside my never-ending thoughts" },
+      { t: 94.293,  l: "I'm trying hard 'cause I know what it costs" },
+      { t: 100.769, l: "'Cause one day we'll run out of" },
+      { t: 104.075, l: "Time" },
+      { t: 105.263, l: "Memories we'll leave them behind" },
+      { t: 109.121, l: "Many things we can't control" },
+      { t: 112.080, l: "I hope you know it's better to try" },
+      { t: 117.135, l: "'Cause one day we'll run out of" },
+      { t: 120.531, l: "Time" },
+      { t: 121.571, l: "Memories we'll leave them behind" },
+      { t: 125.581, l: "Darling when push comes to shove" },
+      { t: 128.484, l: "Your best is enough it won't hurt to try" },
+      { t: 133.731, l: "'Cause one day we'll run out of" },
+      { t: 135.762, l: "Time and time again it rains things I don't understand" },
+      { t: 139.616, l: "Drenched all over still I endure all I can" },
+      { t: 143.847, l: "And I'm well aware there's no reset in this world" },
+      { t: 147.802, l: "So I'll never ever walk away with stones left unturned" },
+      { t: 151.548, l: "'Cause if I'm leaving anyway I'm spending every day" },
+      { t: 156.119, l: "Scattering stars in the night sky hoping it'll lead the way for better days" },
+      { t: 161.101, l: "Savor every moment with me while we're here" },
+      { t: 163.305, l: "'Cause I know one day" },
+      { t: 168.805, l: "Time" },
+      { t: 170.620, l: "Memories we'll leave them behind" },
+      { t: 174.440, l: "Many things we can't control" },
+      { t: 177.608, l: "And I hope you know it's better to try" },
+      { t: 182.572, l: "'Cause one day we'll run out of" },
+      { t: 187.745, l: "Time" },
+      { t: 189.076, l: "Memories we'll leave them behind (oh oh)" },
+      { t: 193.168, l: "Many things we can't control (we can't control)" },
+      { t: 196.173, l: "I hope you know it's better to try (I hope you know oh)" },
+      { t: 200.996, l: "'Cause one day we'll run out of" },
+      { t: 204.418, l: "Time" },
+      { t: 205.615, l: "Memories we'll leave them behind" },
+      { t: 209.278, l: "Darling when push comes to shove" },
+      { t: 212.509, l: "Your best is enough it won't hurt to try" },
+      { t: 217.386, l: "'Cause one day we'll run out of" },
+    ]
+  },
+  {
+    src:       'saranggola.mp3',
+    title:     'Saranggola',
+    artist:    'Ben&Ben',
+    logo:      'benben.jpg',
+    spotify:   'https://open.spotify.com/artist/4DAcJXcjX0zlQAZAPAx4Zb?si=CbxQxAtzQpSVueixy_nTOg',
+    copyright: '⚠️ Copyright Disclaimer: "Saranggola" by Ben&Ben is used for personal non-commercial portfolio purposes only. All rights belong to Ben&Ben and their respective labels. No copyright infringement intended.',
+    lyrics: [
+      { t: 0.001,  l: "Saranggola'y lilipad sa kahel ng kalangitan" },
+      { t: 5.647,  l: "Paalam na nga ba sa ating nakaraan" },
+      { t: 9.971,  l: "Ngunit sa'n man tayo hipan ng amihan" },
+      { t: 15.609, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 21.019, l: "Ooh-ooh ooh-ooh" },
+      { t: 25.532, l: "Ooh-ooh ooh-ooh" },
+      { t: 30.817, l: "Kung aking uulitin itong mahabang byahe" },
+      { t: 35.799, l: "Sa kada yugto ng ating paglalakbay" },
+      { t: 40.812, l: "Wala akong babaguhin ni isang detalye" },
+      { t: 45.445, l: "Sa dami ba naman ng sinuong magkasabay" },
+      { t: 49.722, l: "Sa pagbadya ng kulimlim na tinadhana" },
+      { t: 54.314, l: "'Di magmamaliw ating mga gunita" },
+      { t: 63.348, l: "Saranggola'y lilipad sa kahel ng kalangitan" },
+      { t: 68.707, l: "Paalam na nga ba sa ating nakaraan" },
+      { t: 73.448, l: "Ngunit sa'n man tayo hipan ng amihan" },
+      { t: 78.705, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 83.970, l: "Ooh-ooh ooh-ooh" },
+      { t: 89.771, l: "Lumang mga larawang" },
+      { t: 92.141, l: "Nakaplasta sa mga dingding may tamis at pait" },
+      { t: 97.683, l: "Babalikan tambayan na tindahan" },
+      { t: 101.976, l: "Kwentuhang magdamagang" },
+      { t: 104.365, l: "Nung bata pa't nangangarap lang" },
+      { t: 108.733, l: "Sa pagkagat ng realidad ng buhay" },
+      { t: 113.132, l: "Landas nati'y sadyang magkakahiwalay" },
+      { t: 119.359, l: "Saranggola'y lilipad sa kahel ng kalangitan" },
+      { t: 124.797, l: "Paalam na nga ba sa ating nakaraan" },
+      { t: 128.792, l: "Ngunit sa'n man tayo hipan ng amihan" },
+      { t: 134.523, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 149.176, l: "Sarado na ang kabanata ngunit ba't" },
+      { t: 154.197, l: "Ayaw ko pang harapin ang katotohanang" },
+      { t: 160.761, l: "Hindi na nga tugma ang pagtutunguhan" },
+      { t: 172.788, l: "Sa'n man hipan ng hanging amihan" },
+      { t: 178.403, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 182.549, l: "Salamat sa'ting pinagsamahan" },
+      { t: 187.687, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 193.050, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 196.796, l: "Saranggola'y lilipad sa kahel ng kalangitan" },
+      { t: 202.169, l: "Paalam na nga ba sa ating nakaraan" },
+      { t: 206.281, l: "Ngunit sa'n man tayo hipan ng amihan" },
+      { t: 212.118, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 216.177, l: "Saranggola'y lilipad sa kahel ng kalangitan" },
+      { t: 221.476, l: "Pangarap na lang ba ang ating walang hanggan" },
+      { t: 226.605, l: "Sa'n man tayo hipan ng amihan" },
+      { t: 231.530, l: "'Di ipagpapalit ang pagkakaibigan" },
+      { t: 236.775, l: "Saranggola (lilipad lilipad na)" },
+      { t: 241.306, l: "Saranggola (lilipad lilipad na)" },
+      { t: 246.310, l: "Kahel na ang kulay ng kalangitan" },
+      { t: 251.188, l: "Saranggola (lilipad lilipad na)" },
+    ]
+  }
 ];
+
+let currentSongIdx = 0;
+let LYRICS = SONGS[0].lyrics;
 
 /* ============================================================
    MUSIC PLAYER + LYRICS ENGINE
    ============================================================ */
 const bgMusic       = document.getElementById('bgMusic');
 const musicToggle   = document.getElementById('musicToggle');
+const musicPicker   = document.getElementById('musicPicker');
 const lyricsOverlay = document.getElementById('lyricsOverlay');
 const lyricPrev     = document.getElementById('lyricPrev');
 const lyricCurrent  = document.getElementById('lyricCurrent');
 const lyricNext     = document.getElementById('lyricNext');
 
+/* Credit bar elements */
+const creditCopyright = document.getElementById('creditCopyright');
+const creditLink      = document.getElementById('creditLink');
+const creditLogo      = document.getElementById('creditLogo');
+const creditSong      = document.getElementById('creditSong');
+const creditArtist    = document.getElementById('creditArtist');
+
 let musicPlaying    = false;
 let currentLyricIdx = -1;
 let lyricRaf        = null;
+
+/* ---- Update credit bar to match the active song ---- */
+function updateCredit(idx) {
+  const song = SONGS[idx];
+  creditCopyright.textContent = song.copyright;
+  creditLink.href             = song.spotify;
+  creditLogo.src              = song.logo;
+  creditLogo.alt              = song.artist;
+  creditSong.textContent      = '🎵 ' + song.title;
+  creditArtist.textContent    = song.artist + ' — Listen on Spotify';
+  /* update picker active state */
+  document.querySelectorAll('.music-picker-item').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
+}
+
+/* ---- Switch to a different song ---- */
+function switchSong(idx) {
+  const wasPlaying = musicPlaying;
+  if (musicPlaying) stopMusic();
+  currentSongIdx = idx;
+  LYRICS = SONGS[idx].lyrics;
+  bgMusic.src = SONGS[idx].src;
+  bgMusic.load();
+  updateCredit(idx);
+  closePicker();
+  if (wasPlaying) {
+    bgMusic.addEventListener('canplay', function onCanPlay() {
+      bgMusic.removeEventListener('canplay', onCanPlay);
+      startMusic();
+    });
+  }
+}
 
 /* ---- Build animated word HTML ---- */
 function buildWordHTML(text) {
@@ -567,13 +679,11 @@ function renderLyrics(idx) {
   lyricPrev.textContent = prev;
   lyricNext.textContent = next;
 
-  // Animate current line in
   lyricCurrent.classList.remove('swap-in');
-  void lyricCurrent.offsetWidth; // reflow
+  void lyricCurrent.offsetWidth;
   lyricCurrent.innerHTML = cur ? buildWordHTML(cur) : '';
   lyricCurrent.classList.add('swap-in');
 
-  // Particle burst on line change
   burstParticles();
 }
 
@@ -618,10 +728,61 @@ function stopMusic() {
   lyricNext.textContent  = '';
 }
 
-/* ---- Toggle ---- */
-musicToggle.addEventListener('click', () => {
-  if (musicPlaying) stopMusic();
-  else startMusic();
+/* ---- Music picker open / close ---- */
+function openPicker() {
+  musicPicker.classList.add('open');
+}
+function closePicker() {
+  musicPicker.classList.remove('open');
+}
+
+/* ---- Long-press logic ---- */
+let holdTimer    = null;
+let didLongPress = false;
+
+function onPressStart(e) {
+  didLongPress = false;
+  holdTimer = setTimeout(() => {
+    didLongPress = true;
+    openPicker();
+  }, 500);
+}
+
+function onPressEnd(e) {
+  clearTimeout(holdTimer);
+  holdTimer = null;
+  if (!didLongPress) {
+    /* short click → play / pause */
+    if (musicPicker.classList.contains('open')) {
+      closePicker();
+    } else {
+      if (musicPlaying) stopMusic();
+      else startMusic();
+    }
+  }
+  didLongPress = false;
+}
+
+musicToggle.addEventListener('mousedown',  onPressStart);
+musicToggle.addEventListener('touchstart', onPressStart, { passive: true });
+musicToggle.addEventListener('mouseup',    onPressEnd);
+musicToggle.addEventListener('touchend',   onPressEnd);
+musicToggle.addEventListener('mouseleave', () => { clearTimeout(holdTimer); holdTimer = null; });
+
+/* Close picker when clicking outside */
+document.addEventListener('click', (e) => {
+  if (!musicPicker.contains(e.target) && e.target !== musicToggle) {
+    closePicker();
+  }
+});
+
+/* Wire up picker song buttons */
+document.querySelectorAll('.music-picker-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const idx = parseInt(btn.dataset.idx, 10);
+    if (idx !== currentSongIdx) switchSong(idx);
+    else closePicker();
+  });
 });
 
 /* Auto-start after intro (5s) with slight delay for smoothness */
