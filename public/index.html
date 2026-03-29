@@ -67,36 +67,36 @@
     </div>
   </section>
 
-  <!-- ============ BIRTHDAY COUNTDOWN ============ -->
-  <section class="section birthday-section" id="birthday">
-    <div class="container">
-      <div class="birthday-wrap reveal">
-        <div class="birthday-label">🎂 Birthday Countdown</div>
-        <p class="birthday-sub">Next birthday: <strong>April 5</strong></p>
-        <div class="countdown-grid">
-          <div class="countdown-block glass">
-            <span class="count-num" id="cdDays">00</span>
-            <span class="count-label">Days</span>
-          </div>
-          <div class="countdown-sep">:</div>
-          <div class="countdown-block glass">
-            <span class="count-num" id="cdHours">00</span>
-            <span class="count-label">Hours</span>
-          </div>
-          <div class="countdown-sep">:</div>
-          <div class="countdown-block glass">
-            <span class="count-num" id="cdMins">00</span>
-            <span class="count-label">Mins</span>
-          </div>
-          <div class="countdown-sep">:</div>
-          <div class="countdown-block glass">
-            <span class="count-num" id="cdSecs">00</span>
-            <span class="count-label">Secs</span>
-          </div>
-        </div>
-      </div>
+  <!-- ============ BIRTHDAY STRIP ============ -->
+  <div class="bday-strip" id="bdayStrip">
+    <div class="bday-clock-side">
+      <div class="bday-live-time" id="liveTime">--:--:--</div>
+      <div class="bday-live-date" id="liveDate">Loading...</div>
     </div>
-  </section>
+    <div class="bday-vdiv"></div>
+    <div class="bday-cd-side">
+      <span class="bday-cd-label" id="bdayLabel">🎂 Birthday in</span>
+      <span class="bday-cd-nums">
+        <span><b id="cdDays">00</b><small>d</small></span>
+        <span class="bday-col">:</span>
+        <span><b id="cdHours">00</b><small>h</small></span>
+        <span class="bday-col">:</span>
+        <span><b id="cdMins">00</b><small>m</small></span>
+        <span class="bday-col">:</span>
+        <span><b id="cdSecs">00</b><small>s</small></span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ============ BIRTHDAY CELEBRATION OVERLAY ============ -->
+  <div class="bday-banner" id="bdayBanner">
+    <canvas id="confettiCanvas"></canvas>
+    <div class="bday-banner-content">
+      <div class="bday-banner-emoji">🎂🎉🎈</div>
+      <h2 class="bday-banner-title">Happy Birthday, Mart!</h2>
+      <p class="bday-banner-sub">Today is your day — April 5! Enjoy it to the fullest! 🥳</p>
+    </div>
+  </div>
 
   <!-- ============ ABOUT ============ -->
   <section class="section" id="about">
@@ -107,14 +107,14 @@
           <div class="about-img-card glass">
             <img src="profile.jpg" alt="Mart" class="about-photo no-save" draggable="false" />
             <div class="about-badge">
-              <span>17</span>
+              <span id="ageBadgeNum">17</span>
               <small>years old</small>
             </div>
           </div>
         </div>
         <div class="about-text reveal">
           <p class="about-bio">
-            Hey! I'm <strong>Mart</strong>, a 17-year-old who loves building things with code and AI — mostly websites and bots. When I'm not coding, you'll probably find me deep in a Mobile Legends match or exploring Minecraft worlds. Oh, and I can sing too. I'm <strong>CSS NC2 certified</strong> and always just chilling while learning something new.
+            Hey! I'm <strong>Mart</strong>, a <span id="ageBioText">17</span>-year-old who loves building things with code and AI — mostly websites and bots. When I'm not coding, you'll probably find me deep in a Mobile Legends match or exploring Minecraft worlds. Oh, and I can sing too. I'm <strong>CSS NC2 certified</strong> and always just chilling while learning something new.
           </p>
           <div class="about-stats">
             <div class="stat glass">
@@ -122,7 +122,7 @@
               <span class="stat-label">Certified</span>
             </div>
             <div class="stat glass">
-              <span class="stat-num">17</span>
+              <span class="stat-num" id="ageStatNum">17</span>
               <span class="stat-label">Years Old</span>
             </div>
             <div class="stat glass">
@@ -313,9 +313,11 @@
       </div>
       <div class="modal-video-wrap">
         <div class="vid-badge">1K+ Wanwan Matches 🗡️</div>
-        <video class="modal-video" id="wanwanVid" controls playsinline preload="metadata">
-          <source src="wanwan.mp4" type="video/mp4" />
-        </video>
+        <div class="vid-no-interact">
+          <video class="modal-video" id="wanwanVid" autoplay loop muted playsinline preload="auto">
+            <source src="wanwan.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
     </div>
   </div>
