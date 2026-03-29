@@ -674,14 +674,6 @@ function updateCredit(idx) {
     badge.style.animation = '';
   }
 
-  /* update theme overlay color for flash */
-  const overlay = document.getElementById('themeOverlay');
-  if (overlay) {
-    overlay.style.background = idx === 0
-      ? 'radial-gradient(circle, rgba(249,115,22,0.18), transparent 70%)'
-      : 'radial-gradient(circle, rgba(251,191,36,0.18), transparent 70%)';
-  }
-
   /* update picker active state */
   document.querySelectorAll('.music-picker-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === idx);
@@ -689,23 +681,32 @@ function updateCredit(idx) {
 }
 
 /* ---- Apply / reset colour theme ---- */
+const THEME_RIPPLE_COLORS = [
+  'rgba(249,115,22,0.55)',   /* Time — orange */
+  'rgba(251,191,36,0.55)',   /* Saranggola — gold */
+];
+const THEME_RESET_COLOR = 'rgba(79,142,247,0.55)';
+
+function triggerRipple(color) {
+  const overlay = document.getElementById('themeOverlay');
+  if (!overlay) return;
+  overlay.style.background = color;
+  overlay.classList.remove('flash');
+  void overlay.offsetWidth;
+  overlay.classList.add('flash');
+  overlay.addEventListener('animationend', () => overlay.classList.remove('flash'), { once: true });
+}
+
 function applyTheme(idx) {
   const themeClass = idx === 0 ? 'theme-time' : 'theme-saranggola';
   document.body.classList.remove('theme-time', 'theme-saranggola');
   document.body.classList.add(themeClass);
-
-  /* flash overlay */
-  const overlay = document.getElementById('themeOverlay');
-  if (overlay) {
-    overlay.classList.remove('flash');
-    void overlay.offsetWidth;
-    overlay.classList.add('flash');
-    overlay.addEventListener('animationend', () => overlay.classList.remove('flash'), { once: true });
-  }
+  triggerRipple(THEME_RIPPLE_COLORS[idx] || THEME_RIPPLE_COLORS[0]);
 }
 
 function resetTheme() {
   document.body.classList.remove('theme-time', 'theme-saranggola');
+  triggerRipple(THEME_RESET_COLOR);
 }
 
 /* ---- Switch to a different song ---- */
@@ -804,23 +805,28 @@ function closePicker() {
   musicPicker.classList.remove('open');
 }
 
-/* ---- Long-press logic ---- */
+/* ---- Long-press logic (Pointer Events — no touch/mouse double-fire) ---- */
 let holdTimer    = null;
 let didLongPress = false;
+let pointerDown  = false;
 
-function onPressStart(e) {
+musicToggle.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  pointerDown  = true;
   didLongPress = false;
   holdTimer = setTimeout(() => {
     didLongPress = true;
+    pointerDown  = false;
     openPicker();
   }, 500);
-}
+});
 
-function onPressEnd(e) {
+musicToggle.addEventListener('pointerup', (e) => {
+  if (!pointerDown) return;
+  pointerDown = false;
   clearTimeout(holdTimer);
   holdTimer = null;
   if (!didLongPress) {
-    /* short click → play / pause */
     if (musicPicker.classList.contains('open')) {
       closePicker();
     } else {
@@ -829,13 +835,10 @@ function onPressEnd(e) {
     }
   }
   didLongPress = false;
-}
+});
 
-musicToggle.addEventListener('mousedown',  onPressStart);
-musicToggle.addEventListener('touchstart', onPressStart, { passive: true });
-musicToggle.addEventListener('mouseup',    onPressEnd);
-musicToggle.addEventListener('touchend',   onPressEnd);
-musicToggle.addEventListener('mouseleave', () => { clearTimeout(holdTimer); holdTimer = null; });
+musicToggle.addEventListener('pointerleave',  () => { clearTimeout(holdTimer); holdTimer = null; pointerDown = false; });
+musicToggle.addEventListener('pointercancel', () => { clearTimeout(holdTimer); holdTimer = null; pointerDown = false; });
 
 /* Close picker when clicking outside */
 document.addEventListener('click', (e) => {
@@ -858,6 +861,9 @@ bgMusic.addEventListener('ended', () => {
   const nextIdx = (currentSongIdx + 1) % SONGS.length;
   switchSong(nextIdx);
 });
+
+/* Initialize credit badge so it's populated on the very first play */
+updateCredit(0);
 
 /* Auto-start after intro (5s) with slight delay for smoothness */
 setTimeout(() => { startMusic(); }, 5400);

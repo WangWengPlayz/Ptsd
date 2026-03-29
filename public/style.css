@@ -72,8 +72,13 @@ body.theme-saranggola {
 body,
 .navbar, .glass, .skill-card, .about-img-card,
 .stat, .hobby-card, .exp-card, .contact-card,
-.music-credit-bar, .section-alt,
-.music-toggle, .music-picker {
+.music-credit-bar, .section-alt, .hero,
+.btn, .btn-primary, .btn-outline,
+.music-toggle, .music-picker,
+.nav-links a, .cursor, .hero-nickname,
+.section-title, .profile-glow, .scroll-indicator,
+.about-badge, .skill-icon, .timeline-dot,
+.footer, footer {
   transition:
     background-color 0.9s ease,
     background 0.9s ease,
@@ -83,19 +88,21 @@ body,
 }
 
 /* ============================================================
-   THEME TRANSITION FLASH OVERLAY
+   THEME TRANSITION RIPPLE OVERLAY
    ============================================================ */
 .theme-overlay {
   position: fixed; inset: 0; z-index: 9000;
   pointer-events: none; opacity: 0;
+  /* Ripple expands from bottom-right where the music button lives */
 }
 .theme-overlay.flash {
-  animation: themeFlash 0.65s cubic-bezier(0.4,0,0.2,1) forwards;
+  animation: themeRipple 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-@keyframes themeFlash {
-  0%   { opacity: 0; }
-  30%  { opacity: 0.22; }
-  100% { opacity: 0; }
+@keyframes themeRipple {
+  0%   { opacity: 0;    clip-path: circle(0%   at 96% 96%); }
+  25%  { opacity: 0.85; clip-path: circle(35%  at 96% 96%); }
+  60%  { opacity: 0.5;  clip-path: circle(90%  at 96% 96%); }
+  100% { opacity: 0;    clip-path: circle(140% at 96% 96%); }
 }
 
 body {
@@ -217,8 +224,28 @@ a { text-decoration: none; color: inherit; }
 .navbar.scrolled {
   background: rgba(4, 9, 26, 0.95);
   backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-  box-shadow: 0 1px 0 rgba(79,142,247,0.12), 0 4px 32px rgba(0,0,0,0.5);
+  box-shadow: 0 1px 0 var(--glass-border), 0 4px 32px rgba(0,0,0,0.5);
   padding: 14px 6%;
+}
+body.theme-time .navbar.scrolled {
+  background: rgba(21, 8, 4, 0.95);
+}
+body.theme-saranggola .navbar.scrolled {
+  background: rgba(17, 12, 2, 0.95);
+}
+
+/* Theme-specific hero backgrounds */
+body.theme-time .hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -5%, rgba(249,115,22,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(236,72,153,0.10) 0%, transparent 60%),
+    var(--navy);
+}
+body.theme-saranggola .hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -5%, rgba(251,191,36,0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(52,211,153,0.09) 0%, transparent 60%),
+    var(--navy);
 }
 
 .nav-logo {
@@ -314,7 +341,7 @@ a { text-decoration: none; color: inherit; }
 
 .profile-glow {
   position: absolute; inset: -30px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(79,142,247,0.22) 0%, transparent 60%);
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
   pointer-events: none; animation: pulseGlow 3.5s ease-in-out infinite;
 }
 
@@ -400,12 +427,12 @@ a { text-decoration: none; color: inherit; }
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: var(--white);
-  box-shadow: 0 4px 20px rgba(79,142,247,0.35), 0 0 0 0 rgba(79,142,247,0.4);
+  box-shadow: 0 4px 20px var(--accent-glow), 0 0 0 0 var(--accent-glow);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 32px rgba(79,142,247,0.5), 0 0 0 6px rgba(79,142,247,0.1);
+  box-shadow: 0 8px 32px var(--accent-glow), 0 0 0 6px var(--glass-border);
 }
 
 .btn-outline {
@@ -416,14 +443,14 @@ a { text-decoration: none; color: inherit; }
 
 .btn-outline:hover {
   border-color: var(--accent); color: var(--accent);
-  background: rgba(79,142,247,0.08);
+  background: var(--glass-bg);
   transform: translateY(-3px) scale(1.02);
 }
 
 .scroll-indicator {
   position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
   width: 28px; height: 46px;
-  border: 2px solid rgba(79,142,247,0.35);
+  border: 2px solid var(--glass-border);
   border-radius: 14px; display: flex; justify-content: center; padding-top: 7px;
   animation: fadeUp 1s ease 1.5s both;
 }
