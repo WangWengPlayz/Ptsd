@@ -238,6 +238,8 @@ function setCD(id, val) {
   if (el.textContent !== s) { el.textContent = s; }
 }
 
+let _lastCheckedDay = -1;
+
 function updateClockAndCountdown() {
   const ph = getPHDate();
 
@@ -249,6 +251,13 @@ function updateClockAndCountdown() {
   const liveDateEl = document.getElementById('liveDate');
   if (liveTimeEl) liveTimeEl.textContent = timeStr;
   if (liveDateEl) liveDateEl.textContent = dateStr;
+
+  // Auto-update age when the calendar day changes (e.g. midnight on April 5)
+  const todayDay = ph.getDate();
+  if (todayDay !== _lastCheckedDay) {
+    _lastCheckedDay = todayDay;
+    updateAge();
+  }
 
   // Birthday countdown
   const isToday = ph.getMonth() === 3 && ph.getDate() === 5; // April 5
@@ -628,19 +637,75 @@ let musicPlaying    = false;
 let currentLyricIdx = -1;
 let lyricRaf        = null;
 
-/* ---- Update credit bar to match the active song ---- */
+/* ---- Animated credit update ---- */
 function updateCredit(idx) {
   const song = SONGS[idx];
-  creditCopyright.textContent = song.copyright;
-  creditLink.href             = song.spotify;
-  creditLogo.src              = song.logo;
-  creditLogo.alt              = song.artist;
-  creditSong.textContent      = '🎵 ' + song.title;
-  creditArtist.textContent    = song.artist + ' — Listen on Spotify';
+
+  /* 1. animate out */
+  creditCopyright.classList.add('credit-out');
+  creditLink.classList.add('credit-out');
+
+  setTimeout(() => {
+    /* 2. swap content */
+    creditCopyright.textContent = song.copyright;
+    creditLink.href             = song.spotify;
+    creditLogo.src              = song.logo;
+    creditLogo.alt              = song.artist;
+    creditSong.textContent      = '🎵 ' + song.title;
+    creditArtist.textContent    = song.artist + ' — Listen on Spotify';
+
+    /* 3. animate in */
+    creditCopyright.classList.remove('credit-out');
+    creditLink.classList.remove('credit-out');
+    creditCopyright.classList.add('credit-in');
+    creditLink.classList.add('credit-in');
+    setTimeout(() => {
+      creditCopyright.classList.remove('credit-in');
+      creditLink.classList.remove('credit-in');
+    }, 550);
+  }, 360);
+
+  /* update lyric song badge */
+  const badge = document.getElementById('lyricSongBadge');
+  if (badge) {
+    badge.style.animation = 'none';
+    void badge.offsetWidth;
+    badge.textContent = '🎵 ' + song.artist + ' — ' + song.title;
+    badge.style.animation = '';
+  }
+
+  /* update theme overlay color for flash */
+  const overlay = document.getElementById('themeOverlay');
+  if (overlay) {
+    overlay.style.background = idx === 0
+      ? 'radial-gradient(circle, rgba(249,115,22,0.18), transparent 70%)'
+      : 'radial-gradient(circle, rgba(251,191,36,0.18), transparent 70%)';
+  }
+
   /* update picker active state */
   document.querySelectorAll('.music-picker-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === idx);
   });
+}
+
+/* ---- Apply / reset colour theme ---- */
+function applyTheme(idx) {
+  const themeClass = idx === 0 ? 'theme-time' : 'theme-saranggola';
+  document.body.classList.remove('theme-time', 'theme-saranggola');
+  document.body.classList.add(themeClass);
+
+  /* flash overlay */
+  const overlay = document.getElementById('themeOverlay');
+  if (overlay) {
+    overlay.classList.remove('flash');
+    void overlay.offsetWidth;
+    overlay.classList.add('flash');
+    overlay.addEventListener('animationend', () => overlay.classList.remove('flash'), { once: true });
+  }
+}
+
+function resetTheme() {
+  document.body.classList.remove('theme-time', 'theme-saranggola');
 }
 
 /* ---- Switch to a different song ---- */
@@ -651,6 +716,7 @@ function switchSong(idx) {
   LYRICS = SONGS[idx].lyrics;
   bgMusic.src = SONGS[idx].src;
   bgMusic.load();
+  applyTheme(idx);
   updateCredit(idx);
   closePicker();
   if (wasPlaying) {
@@ -711,6 +777,7 @@ function startMusic() {
     lyricsOverlay.classList.add('visible');
     currentLyricIdx = -1;
     lyricRaf = requestAnimationFrame(lyricLoop);
+    applyTheme(currentSongIdx);
   }).catch(() => {});
 }
 
@@ -726,6 +793,7 @@ function stopMusic() {
   lyricCurrent.innerHTML = '';
   lyricPrev.textContent  = '';
   lyricNext.textContent  = '';
+  resetTheme();
 }
 
 /* ---- Music picker open / close ---- */
@@ -785,6 +853,12 @@ document.querySelectorAll('.music-picker-item').forEach(btn => {
   });
 });
 
+/* ---- Auto-advance to next song when current one ends ---- */
+bgMusic.addEventListener('ended', () => {
+  const nextIdx = (currentSongIdx + 1) % SONGS.length;
+  switchSong(nextIdx);
+});
+
 /* Auto-start after intro (5s) with slight delay for smoothness */
 setTimeout(() => { startMusic(); }, 5400);
 
@@ -801,11 +875,17 @@ function resizeLyricCanvas() {
 resizeLyricCanvas();
 window.addEventListener('resize', resizeLyricCanvas, { passive: true });
 
+function getThemeParticleColors() {
+  if (document.body.classList.contains('theme-time'))       return ['#f97316','#ec4899','#fbbf24','#ff6b6b','#f59e0b'];
+  if (document.body.classList.contains('theme-saranggola')) return ['#fbbf24','#f59e0b','#34d399','#fde68a','#a7f3d0'];
+  return ['#4f8ef7','#7c5cbf','#ffd700','#ff6b6b','#00e5ff'];
+}
+
 function burstParticles() {
   if (!lyricPCX) return;
   const cx = (lyricPC.width || window.innerWidth) / 2;
   const cy = (lyricPC.height || 60) / 2;
-  const colors = ['#4f8ef7','#7c5cbf','#ffd700','#ff6b6b','#00e5ff'];
+  const colors = getThemeParticleColors();
   for (let i = 0; i < 22; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = Math.random() * 3 + 1;

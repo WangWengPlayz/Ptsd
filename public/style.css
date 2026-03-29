@@ -30,6 +30,74 @@
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
 
+/* ============================================================
+   MUSIC THEMES — override CSS vars on body class change
+   ============================================================ */
+
+/* Time by SB19 — vibrant tropical sunset, energetic */
+body.theme-time {
+  --navy:         #150804;
+  --navy-2:       #1d0e08;
+  --navy-3:       #26140c;
+  --navy-card:    #1a0a05;
+  --accent:       #f97316;
+  --accent-2:     #ec4899;
+  --accent-3:     #fbbf24;
+  --accent-glow:  rgba(249,115,22,0.35);
+  --gold:         #f97316;
+  --glass-bg:     rgba(21,8,4,0.68);
+  --glass-border: rgba(249,115,22,0.18);
+  --shadow-card:  0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,180,80,0.04) inset;
+  --shadow-hover: 0 20px 60px rgba(249,115,22,0.28), 0 1px 0 rgba(255,180,80,0.08) inset;
+}
+
+/* Saranggola by Ben&Ben — soft golden-hour, nostalgic, kite in the sky */
+body.theme-saranggola {
+  --navy:         #110c02;
+  --navy-2:       #181202;
+  --navy-3:       #201704;
+  --navy-card:    #160e01;
+  --accent:       #fbbf24;
+  --accent-2:     #f59e0b;
+  --accent-3:     #34d399;
+  --accent-glow:  rgba(251,191,36,0.38);
+  --gold:         #fbbf24;
+  --glass-bg:     rgba(17,12,2,0.68);
+  --glass-border: rgba(251,191,36,0.18);
+  --shadow-card:  0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,220,80,0.04) inset;
+  --shadow-hover: 0 20px 60px rgba(251,191,36,0.25), 0 1px 0 rgba(255,220,80,0.08) inset;
+}
+
+/* Smooth palette transition on key elements */
+body,
+.navbar, .glass, .skill-card, .about-img-card,
+.stat, .hobby-card, .exp-card, .contact-card,
+.music-credit-bar, .section-alt,
+.music-toggle, .music-picker {
+  transition:
+    background-color 0.9s ease,
+    background 0.9s ease,
+    border-color 0.7s ease,
+    box-shadow 0.7s ease,
+    color 0.6s ease;
+}
+
+/* ============================================================
+   THEME TRANSITION FLASH OVERLAY
+   ============================================================ */
+.theme-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none; opacity: 0;
+}
+.theme-overlay.flash {
+  animation: themeFlash 0.65s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes themeFlash {
+  0%   { opacity: 0; }
+  30%  { opacity: 0.22; }
+  100% { opacity: 0; }
+}
+
 body {
   font-family: var(--font);
   background: var(--navy);
@@ -1028,82 +1096,120 @@ body.bday-mode { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.3); }
    LYRICS OVERLAY
    ============================================================ */
 .lyrics-overlay {
-  position: fixed; bottom: 86px; left: 0; right: 0;
+  position: fixed; bottom: 82px; left: 0; right: 0;
   z-index: 1500; text-align: center; pointer-events: none;
-  padding: 0 16px; opacity: 0; transition: opacity 0.7s ease;
+  padding: 0 12px; opacity: 0;
+  transition: opacity 0.7s ease;
 }
-
 .lyrics-overlay.visible { opacity: 1; }
 
 .lyric-particles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
+/* Glass backdrop behind the lyrics text */
+.lyrics-backdrop {
+  position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%);
+  width: min(700px, 96vw);
+  height: calc(100% + 28px);
+  background: rgba(4,9,26,0.55);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+  pointer-events: none;
+  z-index: 1;
+}
+body.theme-time      .lyrics-backdrop { background: rgba(21,8,4,0.55); }
+body.theme-saranggola .lyrics-backdrop { background: rgba(17,12,2,0.55); }
+
 .lyrics-inner {
   position: relative; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 20px 10px;
 }
 
-.lyric-prev {
-  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
-  color: rgba(203,213,232,0.25); font-weight: 400;
-  min-height: 1.4em; letter-spacing: 0.3px;
+/* ---- Song badge ---- */
+.lyric-song-badge {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-glow);
+  color: var(--accent);
+  border: 1px solid var(--glass-border);
+  padding: 4px 14px; border-radius: 50px;
+  margin-bottom: 4px; min-height: 22px;
+  transition: color 0.6s ease, background 0.6s ease, border-color 0.6s ease;
+  animation: badgeFadeIn 0.5s ease forwards;
+}
+@keyframes badgeFadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ---- Previous & Next lines ---- */
+.lyric-prev, .lyric-next {
+  font-size: clamp(0.78rem, 1.6vw, 0.98rem);
+  color: rgba(203,213,232,0.38); font-weight: 500;
+  min-height: 1.5em; letter-spacing: 0.3px;
   transition: all 0.5s ease;
+  max-width: 90%; line-height: 1.4;
 }
 
+/* ---- Current line ---- */
 .lyric-current {
-  font-size: clamp(1rem, 2.8vw, 1.5rem); font-weight: 700;
-  color: var(--white); min-height: 2em;
-  letter-spacing: 0.3px; line-height: 1.4;
-  text-shadow: 0 0 24px rgba(79,142,247,0.9), 0 0 50px rgba(79,142,247,0.45), 0 0 100px rgba(79,142,247,0.2);
+  font-size: clamp(1.15rem, 3.5vw, 1.85rem); font-weight: 800;
+  color: var(--white); min-height: 2.2em;
+  letter-spacing: 0.2px; line-height: 1.35;
+  text-shadow:
+    0 0 20px var(--accent-glow),
+    0 0 50px var(--accent-glow),
+    0 2px 8px rgba(0,0,0,0.8);
+  max-width: 95%;
+  transition: text-shadow 0.6s ease;
 }
 
-.lyric-next {
-  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
-  color: rgba(203,213,232,0.25); font-weight: 400;
-  min-height: 1.4em; letter-spacing: 0.3px;
-  transition: all 0.5s ease;
-}
-
+/* ---- Word animation ---- */
 .ly-word {
-  display: inline-block; opacity: 0; transform: translateY(14px);
-  animation: lyricWordIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: calc(var(--wi) * 0.055s);
+  display: inline-block; opacity: 0; transform: translateY(16px);
+  animation: lyricWordIn 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(var(--wi) * 0.06s);
 }
-
 @keyframes lyricWordIn { to { opacity:1; transform:translateY(0); } }
 
+/* Highlight special word "time" only in default/time theme */
 .ly-word.ly-time {
   color: var(--gold);
-  text-shadow: 0 0 24px rgba(251,191,36,1), 0 0 60px rgba(251,191,36,0.7), 0 0 120px rgba(251,191,36,0.3);
-  animation: lyricWordIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards,
-             timePulse 1.4s ease-in-out 0.45s infinite;
-  font-size: 1.15em;
+  text-shadow:
+    0 0 24px rgba(251,191,36,1),
+    0 0 60px rgba(251,191,36,0.7),
+    0 0 120px rgba(251,191,36,0.3);
+  animation:
+    lyricWordIn 0.48s cubic-bezier(0.34,1.56,0.64,1) forwards,
+    timePulse 1.4s ease-in-out 0.48s infinite;
+  font-size: 1.12em;
 }
-
 @keyframes timePulse {
   0%,100% { text-shadow: 0 0 24px rgba(251,191,36,1), 0 0 60px rgba(251,191,36,0.7); transform: scale(1); }
-  50%      { text-shadow: 0 0 50px rgba(251,191,36,1), 0 0 100px rgba(251,191,36,0.9); transform: scale(1.1); }
+  50%      { text-shadow: 0 0 50px rgba(251,191,36,1), 0 0 100px rgba(251,191,36,0.9); transform: scale(1.12); }
 }
 
-.lyric-current.swap-out { animation: lyricOut 0.25s ease forwards; }
-@keyframes lyricOut { to { opacity:0; transform:translateY(-12px); } }
-
-.lyric-current.swap-in { animation: lyricIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-@keyframes lyricIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+/* Swap animations */
+.lyric-current.swap-out { animation: lyricOut 0.22s ease forwards; }
+@keyframes lyricOut { to { opacity:0; transform:translateY(-14px); } }
+.lyric-current.swap-in { animation: lyricIn 0.48s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+@keyframes lyricIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
 .lyrics-overlay::before {
-  content: ''; position: absolute; bottom: -12px; left: 0; right: 0; height: 180px;
-  background: linear-gradient(to top, rgba(4,9,26,0.75) 0%, transparent 100%);
+  content: ''; position: absolute; bottom: -12px; left: 0; right: 0; height: 220px;
+  background: linear-gradient(to top, rgba(4,9,26,0.6) 0%, transparent 100%);
   pointer-events: none;
 }
+body.theme-time       .lyrics-overlay::before { background: linear-gradient(to top, rgba(21,8,4,0.6), transparent); }
+body.theme-saranggola .lyrics-overlay::before { background: linear-gradient(to top, rgba(17,12,2,0.6), transparent); }
 
 /* ============================================================
-   SB19 CREDIT BAR
+   MUSIC CREDIT BAR
    ============================================================ */
 .music-credit-bar {
-  background: linear-gradient(180deg, var(--navy-3) 0%, rgba(4,9,26,0.98) 100%);
-  border-top: 1px solid rgba(79,142,247,0.08);
+  background: linear-gradient(180deg, var(--navy-3) 0%, var(--navy) 100%);
+  border-top: 1px solid var(--glass-border);
   padding: 24px 6%; display: flex; flex-direction: column;
   align-items: center; gap: 18px; text-align: center;
+  transition: background 0.9s ease, border-color 0.7s ease;
 }
 
 .copyright-notice {
@@ -1111,34 +1217,56 @@ body.bday-mode { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.3); }
   max-width: 680px; border: 1px solid rgba(255,255,255,0.05);
   border-radius: var(--radius-sm); padding: 12px 18px;
   background: rgba(255,255,255,0.02);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.copyright-notice.credit-out {
+  opacity: 0; transform: translateY(8px);
+}
+.copyright-notice.credit-in {
+  animation: creditSlideIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes creditSlideIn {
+  from { opacity:0; transform:translateY(-10px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
 .sb19-credit-link {
   display: flex; align-items: center; gap: 14px;
   padding: 14px 22px; border-radius: var(--radius);
-  border: 1px solid rgba(79,142,247,0.15);
-  background: linear-gradient(135deg, rgba(79,142,247,0.07), rgba(139,92,246,0.05));
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, var(--glass-bg), rgba(0,0,0,0.1));
   pointer-events: all;
-  transition: transform var(--tr-spring), box-shadow var(--tr), border-color var(--tr);
+  transition: transform var(--tr-spring), box-shadow var(--tr), border-color var(--tr),
+              background 0.8s ease, opacity 0.35s ease;
+}
+.sb19-credit-link.credit-out {
+  opacity: 0; transform: translateY(10px) scale(0.95);
+}
+.sb19-credit-link.credit-in {
+  animation: creditCardIn 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes creditCardIn {
+  from { opacity:0; transform:translateY(14px) scale(0.94); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
 .sb19-credit-link:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 36px rgba(79,142,247,0.2);
-  border-color: rgba(79,142,247,0.35);
+  box-shadow: 0 12px 36px var(--accent-glow);
+  border-color: var(--accent);
 }
 
 .sb19-logo {
-  width: 48px; height: 48px; border-radius: 12px;
-  object-fit: contain; background: var(--white); padding: 5px;
+  width: 52px; height: 52px; border-radius: 12px;
+  object-fit: cover; background: var(--white); padding: 3px;
   pointer-events: none; transition: transform var(--tr-spring);
+  flex-shrink: 0;
 }
-
 .sb19-credit-link:hover .sb19-logo { transform: scale(1.08) rotate(-3deg); }
 
 .sb19-credit-text { display: flex; flex-direction: column; text-align: left; }
-.sb19-song { font-size: 0.95rem; font-weight: 700; color: var(--white); }
-.sb19-artist { font-size: 0.72rem; color: var(--accent); font-weight: 500; margin-top: 2px; }
+.sb19-song   { font-size: 0.95rem; font-weight: 700; color: var(--white); transition: color 0.6s ease; }
+.sb19-artist { font-size: 0.72rem; color: var(--accent); font-weight: 500; margin-top: 2px; transition: color 0.6s ease; }
 
 /* ============================================================
    RESPONSIVE
@@ -1188,8 +1316,12 @@ body.bday-mode { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.3); }
   .bday-strip { gap: 12px; }
   .bday-vdiv { height: 24px; }
 
-  .lyrics-overlay { bottom: 80px; }
+  .lyrics-overlay { bottom: 76px; padding: 0 6px; }
+  .lyrics-backdrop { width: 98vw; border-radius: 14px; }
+  .lyrics-inner { padding: 12px 14px 8px; gap: 5px; }
+  .lyric-song-badge { font-size: 0.6rem; padding: 3px 10px; }
   .music-toggle { bottom: 18px; right: 18px; width: 48px; height: 48px; }
+  .music-picker { bottom: 78px; right: 18px; min-width: 200px; }
 
   .modal-box { padding: 24px 18px; }
   .modal-title { font-size: 1.25rem; }
@@ -1202,8 +1334,10 @@ body.bday-mode { --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.3); }
   .hero-name { font-size: clamp(1.8rem, 8vw, 2.6rem); }
   .profile-wrapper { width: 130px; height: 130px; }
   .bday-cd-label { display: none; }
-  .lyric-current { font-size: 0.95rem; }
+  .lyric-current { font-size: clamp(0.95rem, 4.5vw, 1.3rem); }
+  .lyric-prev, .lyric-next { font-size: 0.7rem; }
   .nav-links { width: 100%; }
+  .sb19-logo { width: 42px; height: 42px; }
 }
 
 @media (hover: none) {

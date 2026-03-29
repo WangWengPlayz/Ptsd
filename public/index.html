@@ -351,7 +351,7 @@
   </div>
 
   <!-- ============ BACKGROUND MUSIC ============ -->
-  <audio id="bgMusic" preload="auto" loop>
+  <audio id="bgMusic" preload="auto">
     <source src="music.mp3" type="audio/mpeg" />
   </audio>
 
@@ -385,12 +385,17 @@
   <!-- ============ LYRICS OVERLAY ============ -->
   <div class="lyrics-overlay" id="lyricsOverlay">
     <canvas class="lyric-particles" id="lyricParticles"></canvas>
+    <div class="lyrics-backdrop"></div>
     <div class="lyrics-inner">
+      <div class="lyric-song-badge" id="lyricSongBadge"></div>
       <div class="lyric-prev" id="lyricPrev"></div>
       <div class="lyric-current" id="lyricCurrent"></div>
       <div class="lyric-next" id="lyricNext"></div>
     </div>
   </div>
+
+  <!-- ============ THEME TRANSITION OVERLAY ============ -->
+  <div class="theme-overlay" id="themeOverlay"></div>
 
   <!-- ============ MUSIC CREDIT BAR (dynamic) ============ -->
   <div class="music-credit-bar">
