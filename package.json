@@ -1,0 +1,10 @@
+{
+  "name": "jm-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio of Mart John F. Labaco",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}
