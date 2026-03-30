@@ -612,8 +612,8 @@ const SONGS = [
   }
 ];
 
-let currentSongIdx = 0;
-let LYRICS = SONGS[0].lyrics;
+let currentSongIdx = 1;
+let LYRICS = SONGS[1].lyrics;
 
 /* ============================================================
    MUSIC PLAYER + LYRICS ENGINE
@@ -732,8 +732,10 @@ function switchSong(idx, forcePlay = false) {
 /* ---- Build animated word HTML ---- */
 function buildWordHTML(text) {
   return text.split(' ').map((word, i) => {
-    const isTime = word.toLowerCase().replace(/[^a-z]/g, '') === 'time';
-    const cls    = isTime ? 'ly-word ly-time' : 'ly-word';
+    const clean = word.toLowerCase().replace(/[^a-z]/g, '');
+    let cls = 'ly-word';
+    if (clean === 'time')        cls += ' ly-time';
+    if (clean === 'saranggola') cls += ' ly-saranggola';
     return `<span class="${cls}" style="--wi:${i}">${word}</span>`;
   }).join(' ');
 }
@@ -864,7 +866,7 @@ bgMusic.addEventListener('ended', () => {
 });
 
 /* Initialize credit badge so it's populated on the very first play */
-updateCredit(0);
+updateCredit(1);
 
 /* Auto-start after intro (5s) with slight delay for smoothness */
 setTimeout(() => { startMusic(); }, 5400);
