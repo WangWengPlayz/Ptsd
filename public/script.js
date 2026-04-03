@@ -609,6 +609,44 @@ const SONGS = [
       { t: 246.310, l: "Kahel na ang kulay ng kalangitan" },
       { t: 251.188, l: "Saranggola (lilipad lilipad na)" },
     ]
+  },
+  {
+    src:       'laymedown.mp3',
+    title:     'Lay Me Down',
+    artist:    'Sam Smith',
+    logo:      'laymedown.jpg',
+    spotify:   'https://open.spotify.com/artist/2wY79sveU1sp5g7SokKOiI?si=1Q2R3S4T5U6V7W8X',
+    copyright: '⚠️ Copyright Disclaimer: "Lay Me Down" by Sam Smith is used for personal non-commercial portfolio purposes only. All rights belong to Sam Smith and their respective labels (Capitol Records / Universal Music Group). No copyright infringement intended.',
+    lyrics: [
+      { t: 0.010,   l: "Yes I do, I believe" },
+      { t: 3.353,   l: "That one day I will be where I was" },
+      { t: 6.441,   l: "Right there, right next to you" },
+      { t: 9.741,   l: "And it's hard, the days just seem so dark" },
+      { t: 13.353,  l: "The moon, the stars are nothing without you" },
+      { t: 17.626,  l: "Your touch, your skin, where do I begin?" },
+      { t: 22.603,  l: "No words can explain the way I'm missing you" },
+      { t: 28.301,  l: "The night, this emptiness, this hole that I'm inside" },
+      { t: 32.964,  l: "These tears, they tell their own story" },
+      { t: 36.871,  l: "You told me not to cry when you were gone" },
+      { t: 46.054,  l: "But the feeling's overwhelming, it's much too strong" },
+      { t: 54.987,  l: "Can I lay by your side, next to you, you" },
+      { t: 73.173,  l: "And make sure you're alright" },
+      { t: 81.480,  l: "I'll take care of you" },
+      { t: 87.165,  l: "And I don't want to be here if I can't be with you tonight" },
+      { t: 100.526, l: "I'm reaching out to you" },
+      { t: 108.026, l: "Can you hear my call?" },
+      { t: 117.085, l: "This hurt that I've been through" },
+      { t: 122.780, l: "I'm missing you, missing you like crazy" },
+      { t: 133.943, l: "You told me not to cry when you were gone" },
+      { t: 141.259, l: "But the feeling's overwhelming, it's much too strong" },
+      { t: 149.527, l: "Can I lay by your side, next to you, you" },
+      { t: 165.515, l: "And make sure you're alright" },
+      { t: 172.380, l: "I'll take care of you" },
+      { t: 177.817, l: "And I don't wanna be here if I can't be with you tonight" },
+      { t: 189.702, l: "Lay me down tonight, lay me by your side" },
+      { t: 204.896, l: "Lay me down tonight, lay me by your side" },
+      { t: 220.116, l: "Can I lay by your side, next to you, you" },
+    ]
   }
 ];
 
@@ -684,6 +722,7 @@ function updateCredit(idx) {
 const THEME_RIPPLE_COLORS = [
   'rgba(249,115,22,0.55)',   /* Time — orange */
   'rgba(251,191,36,0.55)',   /* Saranggola — gold */
+  'rgba(180,180,180,0.45)',  /* Lay Me Down — silver/charcoal */
 ];
 const THEME_RESET_COLOR = 'rgba(79,142,247,0.55)';
 
@@ -697,15 +736,16 @@ function triggerRipple(color) {
   overlay.addEventListener('animationend', () => overlay.classList.remove('flash'), { once: true });
 }
 
+const THEME_CLASSES = ['theme-time', 'theme-saranggola', 'theme-laymedown'];
+
 function applyTheme(idx) {
-  const themeClass = idx === 0 ? 'theme-time' : 'theme-saranggola';
-  document.body.classList.remove('theme-time', 'theme-saranggola');
-  document.body.classList.add(themeClass);
+  document.body.classList.remove(...THEME_CLASSES);
+  document.body.classList.add(THEME_CLASSES[idx] || THEME_CLASSES[0]);
   triggerRipple(THEME_RIPPLE_COLORS[idx] || THEME_RIPPLE_COLORS[0]);
 }
 
 function resetTheme() {
-  document.body.classList.remove('theme-time', 'theme-saranggola');
+  document.body.classList.remove(...THEME_CLASSES);
   triggerRipple(THEME_RESET_COLOR);
 }
 
@@ -736,6 +776,7 @@ function buildWordHTML(text) {
     let cls = 'ly-word';
     if (clean === 'time')        cls += ' ly-time';
     if (clean === 'saranggola') cls += ' ly-saranggola';
+    if (clean === 'lay')        cls += ' ly-laymedown';
     return `<span class="${cls}" style="--wi:${i}">${word}</span>`;
   }).join(' ');
 }
@@ -887,6 +928,7 @@ window.addEventListener('resize', resizeLyricCanvas, { passive: true });
 function getThemeParticleColors() {
   if (document.body.classList.contains('theme-time'))       return ['#f97316','#ec4899','#fbbf24','#ff6b6b','#f59e0b'];
   if (document.body.classList.contains('theme-saranggola')) return ['#fbbf24','#f59e0b','#34d399','#fde68a','#a7f3d0'];
+  if (document.body.classList.contains('theme-laymedown'))  return ['#e8e8e8','#aaaaaa','#ffffff','#cccccc','#888888'];
   return ['#4f8ef7','#7c5cbf','#ffd700','#ff6b6b','#00e5ff'];
 }
 
